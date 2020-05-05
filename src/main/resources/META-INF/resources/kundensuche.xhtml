@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<title>Elasticsearch Example GUI</title>
+</h:head>
+
+<h:body>
+
+	<h1>Kundensuche</h1>
+
+	<h:form id="master">
+		<p:panel id="schnellsuche" header="Schnellsuche">
+			<p:panelGrid id="grid1" columns="4" layout="grid">
+				<p:inputText id="quicksearch" required="false"
+					value="#{kundensuche.feldSchnellSuche}" />
+
+				<p:commandButton id="schnellSucheButton" value="Suchen" update="master"
+					action="#{kundensuche.schnellSuche}" />
+			</p:panelGrid>
+		</p:panel>
+
+		<p:panel id="suche" header="Suche">
+			<p:panelGrid id="grid2" columns="4" layout="grid">
+				<p:outputLabel for="name" value="Name" />
+				<p:inputText id="name" required="false"
+					value="#{kundensuche.name}" />
+				<p:outputLabel for="vorname" value="Vorname" />
+				<p:inputText id="vorname" required="false"
+					value="#{kundensuche.vorname}" />
+				<p:outputLabel for="kundennummer" value="Kundennummer" />
+				<p:inputText id="kundennummer" required="false"
+					value="#{kundensuche.kundenNummer}" />
+					
+				<p:commandButton id="sucheButton" value="Suchen" update="master"
+					action="#{kundensuche.suche}" />
+			</p:panelGrid>
+		</p:panel>
+		
+		<p:dataTable id="suchErgebnis" var="kunde"
+			value="#{kundensuche.suchErgebnisse}" scrollable="true"
+			scrollHeight="400" emptyMessage="Keine Suchergebnisse vorhanden"
+			selectionMode="single" rowKey="#{kunde.id}">
+
+			<p:ajax event="rowSelect"
+				listener="#{kundensuche.selectKunde}"
+				update="master" />
+
+			<p:column headerText="ID">
+				<h:outputText value="#{kunde.id}" />
+			</p:column>
+			
+			<p:column headerText="Vorname">
+				<h:outputText value="#{kunde.kunde_vorname}" />
+			</p:column>
+
+			<p:column headerText="Name">
+				<h:outputText value="#{kunde.kunde_name}" />
+			</p:column>
+
+			<p:column headerText="Kundennummer">
+				<h:outputText value="#{kunde.kunde_kundennummer}" />
+			</p:column>
+
+			<p:column headerText="Geburtsdatum">
+				<h:outputText value="#{kunde.kunde_geburtsdatum}" >
+				    <f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column headerText="Sperrung">
+				<h:outputText value="#{kunde.kunde_sperrung}" />
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+
+</h:body>
+</html>
